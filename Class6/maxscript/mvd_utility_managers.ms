@@ -16,32 +16,37 @@ struct SelectionManager
 	(
 		local final_selection = #()
 		
-		/* TO-DO
-		(
 		-- Loop through selhierarchy
 		-- save all nodes into final_selection
+		for i = 1 to selhierarchy.count do 
+		(
+			stacknode = getnodebyname selhierarchy[i]
+			append final_selection stacknode
 		)
-		*/
+		
 		select final_selection
 	),
 	
 	-- Update the hierarchy panel with the total amount of nodes that should be taken into count
-	fn updateHierarchy substr layer category = 
-	(		
+	fn updateHierarchy substr layer category = (
+		
 		local candidates = #()
 		local layer_nodes = for i in $* where i.layer.name == layer collect i
-			
-		/* TO-DO
-		(
-			-- Loop through layer nodes and check if their name contains the substring
+		for x = 1 to layer_nodes.count do (
+			local has_substr = findstring layer_nodes[x].Name substr
+			if  has_substr != undefined or substr == "" then ( --refactor
+				append candidates layer_nodes[x].Name
+			)			
 		)
-		*/	
 				
-		/* TO-DO
-		(
-			-- Loop through all the categories and check if their tag  matches the selected one
+		local post_candidates = #()
+		for i = 1 to candidates.count do (
+			-- check for mesh type on given candidates
+			-- TO-DO
+			append post_candidates candidates[i] 
 		)
-		*/	
+		
+		selhierarchy = post_candidates
 		return selhierarchy
 	),
 	
@@ -49,13 +54,22 @@ struct SelectionManager
 	fn updateLayers = 
 	(
 		free layers
-				
-		/* TO-DO
+		
+		-- LayerManager
+		-- Loop through all the layers and retrieve them
+		for i = 0 to layerManager.count - 1 do 
 		(
-			-- Loop through all the layers and retrieve them
-			-- Use 
+			local ilayer = layerManager.getLayer i
+			local ilayerName = ilayer.name
+			append layers ilayerName
 		)
-		*/	
+	),
+	
+	-- Function to retrieve layer names...
+	fn updateTags = 
+	(
+		-- TO-DO in the future
+		
 	),
 	
 	-- Function to update everything we need
@@ -64,6 +78,11 @@ struct SelectionManager
 		-- First, update the layers, search them in max
 		updateLayers()
 		
-		-- Update the categories?
+		-- Update the tags?
 	)	
 )
+
+/*
+	Search for duplicates or any object problems
+
+*/
