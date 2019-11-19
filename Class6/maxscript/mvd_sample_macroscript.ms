@@ -6,24 +6,9 @@ function removeMenu m_name =
 		menuMan.unregistermenu del_menu
 )
 
--- Test function to be called from macro in toolbar
-function create_object_test =
-(
-	delete $objects
-
-	-- Information text
-	t1 = TextPlus Plane:0 name:"macro_text" size:8 pos:[0,-40,0] wirecolor:(color 255 255 255)
-	t1.SetPlaintextString("Macros")
-
-	-- Sphere object
-	sphere name:"macro_sphere" wirecolor:(color (random 0 255) (random 0 255) (random 0 255))
-
-	print "Object created successfully!"
-)
-
 macroScript LaunchMenu category:"MVD" --macroscript menu
 (
-	create_object_test()
+	-- Launch the menu UI
 )
 
 --Adding menu macro process with menuMan
