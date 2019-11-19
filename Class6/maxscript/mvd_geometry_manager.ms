@@ -13,12 +13,12 @@ global layer_colliders = "colliders"
 -- Class used to export the meshes as .obj or binary files
 struct MeshManager 
 (
-	
 	--fs = MVDJson(),           
 	
 	-- Method to export mesh in .obj format
 	fn exportItem obj epath = 
 	(
+		
 		/* TO-DO
 		(
 			-- Get the given object and export it as a .obj format file
@@ -37,6 +37,8 @@ struct MeshManager
 		*/
 	)
 )
+
+meshMan = MeshManager()
 
 -- Class used to export materials and textures
 struct MaterialManager (
@@ -84,8 +86,8 @@ struct MaterialManager (
 
 -- Collider manager
 -- Used to generate collider meshes and types
-struct ColliderManager 
+/*struct ColliderManager 
 (	
 	-- TO-DO
 	-- Class that generates colliders and exports them.
-)
+)*/
