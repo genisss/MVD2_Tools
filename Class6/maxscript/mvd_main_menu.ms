@@ -1,8 +1,5 @@
 -- We can include files using filein 
-filein "mvd_components.ms"
 filein "mvd_utility_managers.ms"
-filein "mvd_scene_exporter.ms"
-filein "mvd_utils.ms"
 
 gc()
 clearListener()
@@ -39,11 +36,20 @@ rollout SBSelection "Selection Tools" width:477 height:252
 	local var2 = sel_layers.selected 
 	local var3 = sel_cat.selected
 	
+	fn updateDataInput = 
+	(
+		man_selection.updateManager()
+		sel_layers.items = man_selection.layers
+		sel_cat.items = man_selection.categories
+		var2 = sel_layers.selected 	
+		var3 = sel_cat.selected
+		lbx1.items = man_selection.updateHierarchy var1 var2 var3
+	)
+	
 	-- On window open
 	on SBSelection open do 
 	(
-		-- Get current strings and set them
-		-- TO-DO, setup
+		updateDataInput()
 	)
 	
 	-- On layer selected
@@ -52,20 +58,26 @@ rollout SBSelection "Selection Tools" width:477 height:252
 		-- Update the manager, with new layers
 		-- Update the hierarchy with the current selected layer and prefix
 		-- TO-DO method calling
+		updateDataInput()
 	)
 	
 	-- On category selected
-	on sel_cat selected  var3 do 
+	on sel_cat selected var3 do 
 	( 
 		-- Update the manager with new layers
 		-- Update the hierarchy with the current selected category
 		-- TO-DO method calling
+		updateDataInput()
 	)
 	
 	-- On name changed
 	on mesh_filter changed var1 do 
 	(
 		-- TO-DO method calling
+		man_selection.updateManager()
+		var2 = sel_layers.selected 	
+		var3 = sel_cat.selected
+		lbx1.items = man_selection.updateHierarchy var1 var2 var3
 	)
 	
 	-- Here we catch button actions
@@ -109,4 +121,5 @@ function createRollouts =
 	addrollout SBUtils FirstDialog rolledUp:on
 )
 
+-- Launching the tool
 createRollouts()
