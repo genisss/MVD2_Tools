@@ -18,12 +18,11 @@ struct MeshManager
 	-- Method to export mesh in .obj format
 	fn exportItem obj epath = 
 	(
-		
-		/* TO-DO
-		(
-			-- Get the given object and export it as a .obj format file
-		)
-		*/
+		-- Build the path and export file
+		select obj
+		local full_path = (epath + obj.name + ".obj")
+		exportFile full_path #noPrompt selectedOnly:true #noPrompt  
+		return full_path
 	),
 	
 	-- Method to export a mesh in binary format
@@ -39,6 +38,7 @@ struct MeshManager
 )
 
 meshMan = MeshManager()
+meshMan.exportItem $Box001 "D:\Users\Vostek\Documents\MVD2019\MVD2_Tools\Class6\assets\models\\"
 
 -- Class used to export materials and textures
 struct MaterialManager (
