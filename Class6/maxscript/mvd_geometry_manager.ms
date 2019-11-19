@@ -43,8 +43,8 @@ meshMan.exportItem $Box001 "D:\Users\Vostek\Documents\MVD2019\MVD2_Tools\Class6\
 -- Class used to export materials and textures
 struct MaterialManager (
 	
-	--fs = MVDJson(),    
-	--fs_tex = MVDJson(), 	
+	fs = MVDJson(),    
+	fs_tex = MVDJson(), 	
 	tech = "pbr.tech",
 	shadows = true,
 	gen_mat = true,
@@ -53,36 +53,75 @@ struct MaterialManager (
 	-- Export the texture of the given map
 	fn exportMap emap ename = (
 		
-		/* TO-DO
-		(
-		-- Export the texture and copy it into assets texture folder
-		-- Save necessary data into the material file.
+		-- Build the json and export the texture
+		local f_name = filenameFromPath emap.filename
+		local full_path = (tex_path + f_name)
+		fs_tex.add ename full_path
+		
+		-- Check if full_path exists, if not, copy texture there
+		if not doesFileExist full_path and gen_tex == true then (
+			format "Copying file from % to %\n" emap.filename full_path
+			copyFile emap.filename full_path
 		)
-		*/
 	),
 	
 	-- Export the material given, parameters and texture definition
 	fn exportItem emat = (
 		
+		fs.add "tech" tech
+		fs.add "shadows" (shadows as integer)
 		local short_path = (mats_path + emat.name + ".mtl")
-		local full_path = (project_path + short_path)
+		local full_path = (short_path)
 		
 		-- Atleast default diffuse needed
 		if emat.diffusemap != undefined then (
 			exportMap emat.diffusemap "diffuse"
-		) else ( -- setup a default in this case.
-			fs_tex.add "diffuse" (tex_path + "default.dds")
+		) else (
+			fs_tex.add "diffuse" (tex_path + "default.png")
 		)
 		
-		/* TO-DO
-		(
-		-- Get all the maps that we have and export them
+		-- Atleast default normal needed
+		if emat.bumpMap != undefined then (
+			exportMap emat.bumpMap "normal"
+		) else (
+			fs_tex.add "normal" (tex_path + "null_normal.jpg")
 		)
-		*/
+		
+		if emat.ambientMap != undefined then (
+			exportMap emat.ambientMap "lightmap"
+		)		
+		
+		if emat.specularMap != undefined then (
+			exportMap emat.specularMap "specular"
+		)	
+		
+		if emat.glossinessMap != undefined then (
+			exportMap emat.glossinessMap "roughness"
+		)	
+		
+		if emat.displacementMap != undefined then (
+			exportMap emat.displacementMap "height"
+		)
+		
+		if emat.selfIllumMap != undefined then (
+			exportMap emat.selfIllumMap "emissive"
+		)
+		
+		if emat.refractionMap != undefined then (
+			exportMap emat.refractionMap "aocclusion"
+		)
+		
+		fs.add "textures" fs_tex
+		if gen_mat == true then (fs.writeDisk full_path)
 		
 		return short_path
 	)
 )
+
+mats_path = "D:\Users\Vostek\Documents\MVD2019\MVD2_Tools\Class6\assets\materials\\"
+tex_path = "D:\Users\Vostek\Documents\MVD2019\MVD2_Tools\Class6\assets\\textures\\"
+matMan = MaterialManager()
+matMan.exportItem ($Box001.material) 
 
 -- Collider manager
 -- Used to generate collider meshes and types
